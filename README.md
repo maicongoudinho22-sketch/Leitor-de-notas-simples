@@ -1,0 +1,1 @@
+# Leitor-de-notas-simples
