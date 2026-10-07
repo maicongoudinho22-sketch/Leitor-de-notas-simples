@@ -20,7 +20,10 @@ jobs:
         distribution: 'temurin'
         cache: gradle
 
-    - name: Grant execute permission for gradlew
+    - name: Grant execute permission for gradlew           ZIP=$(find . -maxdepth 1 -type f -name "*.zip" | head -n 1)
+          mkdir -p app
+          unzip -q "$ZIP" -d app
+
       run: chmod +x gradlew
     - name: Build with Gradle
       run: ./gradlew build
