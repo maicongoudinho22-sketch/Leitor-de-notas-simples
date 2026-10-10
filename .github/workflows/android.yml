@@ -1,29 +1,30 @@
 name: Android CI
 
 on:
+  workflow_dispatch:
   push:
-    branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
+    branches: ["main"]
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
-
     steps:
-    - uses: actions/checkout@v4
-    - name: set up JDK 11
-      uses: actions/setup-java@v4
-      with:
-        java-version: '11'
-        distribution: 'temurin'
-        cache: gradle
+      - name: Baixar arquivos
+        uses: actions/checkout@v4
 
-    - name: Grant execute permission for gradlew           ZIP=$(find . -maxdepth 1 -type f -name "*.zip" | head -n 1)
-          mkdir -p app
-          unzip -q "$ZIP" -d app
+      - name: Preparar Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
 
-      run: chmod +x gradlew
-    - name: Build with Gradle
-      run: ./gradlew build
+      - name: Extrair aplicativo
+        run: |
+          unzip -o app-transportadora.zip -d app-extraido
+          find app-extraido -maxdepth 3 -type f
+
+      - name: Compilar aplicativo
+        run: |
+          cd app-extraido
+          chmod +x gradlew
+          ./gradlew assembleDebug
